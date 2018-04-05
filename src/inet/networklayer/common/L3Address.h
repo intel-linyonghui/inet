@@ -43,8 +43,8 @@ class INET_API L3Address
   public:
     enum AddressType {
         NONE,
-        Ipv4,
-        Ipv6,
+        Ipv4, //TODO uppercase?
+        Ipv6, //TODO uppercase?
         MAC,
         MODULEPATH,
         MODULEID
