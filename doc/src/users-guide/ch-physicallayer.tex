@@ -3,17 +3,47 @@
 
 \section{The Radio Model}
 
+Wireless network interfaces contain a radio model component, which is
+responsible for modeling the physical layer (PHY).\footnote{Wired network interfaces
+could similarly contain an explicit PHY model. The reason they do not is that
+wired links normally have very low error rates and simple observable behavior,
+and there is usually not much to be gained from modeling the physical layer in detail.}
 The radio model describes the physical device that is capable of transmitting
-and receiving signals on the medium. It contains an antenna model, a transmitter
-model, a receiver model, and an energy consumer model. The antenna model is
-shared between the transmitter model and the receiver model. The separation of
-the transmitter model and the receiver model allows asymmetric configurations.
-The energy consumer model is optional and it's only used when the simulation of
-energy consumption is necessary.
+and receiving signals on the medium. 
 
-As stated above the radio module utilizes multiple submodules to further split
-its task. This design decision makes it more extensible and customizable. The
-following sections describe the parts of the radio model.
+Conceptually, a radio model relies on several sub-models:
+
+\begin{itemize}
+  \item antenna model
+  \item transmitter model 
+  \item receiver model
+  \item energy consumer model 
+\end{itemize}
+
+The antenna model is shared between the transmitter model and the receiver model.
+The separation of the transmitter model and the receiver model allows 
+asymmetric configurations. The energy consumer model is optional, and 
+it is only used when the simulation of energy consumption is necessary.
+
+\section{IRadio, Radio}
+
+In INET, radio models implement the \nedtype{IRadio} module interface. 
+A generic, often used implementation of \nedtype{IRadio} is the 
+\nedtype{Radio} NED type. \nedtype{Radio} is an active compound module, 
+that is, it has an associated C++ class that encapsulates the computations.
+
+\nedtype{Radio} contains its antenna, transmitter, receiver and energy
+consumer models as submodules with parametric types:
+
+\begin{ned}
+antenna: <antennaType> like IAntenna;
+transmitter: <transmitterType> like ITransmitter;
+receiver: <receiverType> like IReceiver;
+energyConsumer: <energyConsumerType> like IEnergyConsumer 
+    if energyConsumerType != "";
+\end{ned}
+
+The following sections describe the parts of the radio model.
 
 \section{Antenna Models}
 
