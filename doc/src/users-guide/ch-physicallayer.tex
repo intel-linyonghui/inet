@@ -237,13 +237,25 @@ The \nedtype{Radio} module has several specialized versions derived
 from it, where certain submodule types and parameters are set to fixed values.
 This section describes some of the frequently used ones.
 
+The radio can be replaced in wireless network interfaces by setting the
+\fpar{radioType} parameter, like in the following ini file fragment.
+  
+\begin{inifile}
+**.wlan[*].radioType = "UnitDiskRadio"
+\end{inifile}
+
+However, be aware that not all MAC protocols can be used with all radio models,
+and that some radio models require a matching transmission medium module. 
+
 \subsection{UnitDiskRadio}
 
 \nedtype{UnitDiskRadio} provides a very simple but fast and predictable 
 physical layer model. It is the implementation (with some extensions)
-of \textit{Unit Disk Graph}, a model widely used the study of wireless ad-hoc networks.
-It is applicable if network nodes need to have a finite communication range, 
-but physical effects of signal propagation are to be ignored.
+of the \textit{Unit Disk Graph} model, which is widely used 
+for the study of wireless ad-hoc networks.
+\nedtype{UnitDiskRadio} is applicable if network nodes need 
+to have a finite communication range, but physical effects 
+of signal propagation are to be ignored.
 
 \nedtype{UnitDiskRadio} allows three radii to be given as parameters,
 instead of the usual one: communication range, interference range, and
@@ -276,12 +288,12 @@ provides an even simpler and faster alternative.
 
 \subsection{APSK Radio}
 
-APSK radio models provides a hypothetical radio that simply uses 
+APSK radio models provides a hypothetical radio that models 
 one of the well-known modulations without utilizing other techiques 
 such as forward error correction, interleaving, spreading, etc. 
 (APSK stands for Amplitude and Phase-Shift Keying.)
 
-variants of ApskRadio (Scalar, Dimensional, Layered):
+There are variants of ApskRadio (Scalar, Dimensional, Layered):
 \nedtype{ApskScalarRadio}, \nedtype{ApskDimensionalRadio},
 \nedtype{ApskLayeredRadio}
 
