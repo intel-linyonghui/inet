@@ -205,42 +205,36 @@ The following list provides some examples:
 
 \section{Layered Radio Models}
 
-This module further splits the transmitter and receiver models to allow bit
-precise communication modeling.
+In layered radio models, the transmitter and receiver models are split
+to several stages to allow more fine-grained modeling. 
 
-TODO: layered
+For transmission, processing steps such as packet serialization, 
+forward error correction (FEC) encoding, scrambling, interleaving, and 
+modulation are explicitly modeled. Reception involves the inverse
+operations: demodulation, descrambling, deinterleaving, 
+FEC decoding, and deserialization.
 
-The following sections describe the parts of the layered radio model.
+In layered radio models, these processing steps are encapsulated
+in four stages, represented as four submodules in both the 
+transmitter and receiver model: 
 
-\subsubsection{Encoding and Decoding}
+\begin{enumerate}
+  \item \textit{Encoding and Decoding} describe how the packet domain 
+    signal representation is converted into the bit domain, and vice versa.
+  \item \textit{Modulation and Demodulation} describe how the bit domain
+    signal representation is converted into the symbol domain, and vice versa.
+  \item \textit{Pulse Shaping and Pulse Filtering} describe how the 
+    symbol domain signal representation is converted into the sample domain, 
+    and vice versa.
+  \item \textit{Digital Analog and Analog Digital Conversion} describe 
+    how the sample domain signal representation is converted into the 
+    analog domain, and vice versa.
+\end{enumerate}
 
-This module describes how the packet domain signal representation is converted
-into the bit domain, and vice versa.
-
-TODO: layered
-
-\subsubsection{Modulation and Demodulation}
-
-This module describes how the bit domain signal representation is converted into
-the symbol domain, and vice versa.
-
-TODO: layered
-
-\subsubsection{Pulse Shaping and Pulse Filtering}
-
-This module describes how the symbol domain signal representation is converted
-into the sample domain, and vice versa.
-
-TODO: layered
-
-
-\subsubsection{Digital Analog and Analog Digital Conversion}
-
-This module describes how the sample domain signal representation is converted
-into the analog domain, and vice versa.
-
-TODO: layered
-
+In layered radio transmitters and receivers such as \nedtype{ApskLayeredTransmitter}
+and \nedtype{ApskLayeredReceiver}, these submodules have parametric
+types to make them replaceable. This provides immense freedom for 
+experimentation.
 
 \section{Notable Radio Models}
 
@@ -315,11 +309,23 @@ module UnitDiskTransmitter like ITransmitter
         @class(UnitDiskTransmitter);
         @display("i=block/wtx");
 
+Note: \nedtype{ShortcutInterface} provides an even simpler model...
+
 \subsection{ApskRadio}
 
 TODO
 
-ApskRadio 
+\subsection{IEEE 802.11 Radios}
+
+TODO
+
+\subsection{IEEE 802.15.4 Radios}
+
+TODO
+
+\subsection{UWB-IR Radios}
+
+TODO
 
 %%% Local Variables:
 %%% mode: latex
