@@ -173,6 +173,17 @@ erroneous bits, symbols, or samples depending on the lowest simulated physical
 domain where the real decoding starts. The error model is optional (if omitted,
 all receptions are considered successful.)
 
+The following list provides some examples:
+
+\begin{itemize}
+  \item \nedtype{StochasticErrorModel}: simplistic error model with constant
+    symbol/bit/packet error rates as parameters; suitable for testing. 
+  \item \nedtype{ApskErrorModel} 
+  \item \nedtype{Ieee80211NistErrorModel}, \nedtype{Ieee80211YansErrorModel}, 
+    \nedtype{Ieee80211BerTable\-Error\-Model}: various error models for IEEE 802.11
+    network interfaces.
+\end{itemize}
+
 \subsection{Power Consumption Models}
 
 A substantial part of the energy consumption of communication devices comes from
