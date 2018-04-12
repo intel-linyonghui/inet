@@ -242,13 +242,24 @@ TODO there are a few, but
 
 \subsection{UnitDiskRadio}
 
-TODO
+\nedtype{UnitDiskRadio} provides a very simple but fast and predictable 
+physical layer model. It is the implementation (with some extensions)
+of \textit{Unit Disk Graph}, a model widely used the study of wireless ad-hoc networks.
+It is applicable if network nodes need to have a finite communication range, 
+but physical effects of signal propagation are to be ignored.
 
-UnitDiskRadio
+\nedtype{UnitDiskRadio} allows three radii to be given as parameters,
+instead of the usual one: communication range, interference range, and
+detection range. One can also turn off interference modeling 
+(meaning that signals colliding at a receiver will all be received 
+correctly), which is sometimes a useful abstraction.
 
-        double communicationRange @unit(m);                              // the range where the reception of transmissions produced by this transmitter is possible
-        double interferenceRange @unit(m) = default(communicationRange); // the range where transmissions produced by this transmitter interferes with other transmissions
-        double detectionRange @unit(m) = default(interferenceRange);     // the range where transmissions produced by this transmitter can be detected at all
+\nedtype{UnitDiskRadio} needs to be used together with a special physical
+medium model, \nedtype{UnitDiskRadioMedium}.
+
+The following ini file fragment shows an example configuration.
+
+TODO wtf about those 0 meters???
 
 \begin{inifile}
 *.radioMediumType = "UnitDiskRadioMedium"
@@ -257,59 +268,14 @@ UnitDiskRadio
 *.host[*].wlan[*].radio.transmitter.preambleDuration = 0s
 *.host[*].wlan[*].radio.transmitter.headerLength = 100b
 *.host[*].wlan[*].radio.transmitter.communicationRange = 100m
-*.host[*].wlan[*].radio.transmitter.interferenceRange = 0m    % FIXME wtf is this????
+*.host[*].wlan[*].radio.transmitter.interferenceRange = 0m    
 *.host[*].wlan[*].radio.transmitter.detectionRange = 0m
 *.host[*].wlan[*].radio.receiver.ignoreInterference = true
 \end{inifile}
 
-*
-        double communicationRange @unit(m);                              // the range where the reception of transmissions produced by this transmitter is possible
-        double interferenceRange @unit(m) = default(communicationRange); // the range where transmissions produced by this transmitter interferes with other transmissions
-        double detectionRange @unit(m) = default(interferenceRange);     // the range where transmissions produced by this transmitter can be detected at all
-
-
-
-//
-// This radio model provides a very simple but fast and predictable physical
-// layer behavior. It must be used in conjunction with the ~UnitDiskRadioMedium
-// model.
-//
-// The idea behind this radio model is to describe transmissions with a few
-// distance based parameters: communication range, interference range, and
-// detection range. Whether the reception is successful or not, depends on the
-// distance between the transmitter and the receiver. This model is similar to
-// the unit disk radio, but it's also more general than that. The ideal model
-// also supports an ideal communication channel where all transmissions are
-// received sucessfully independent of distance and interfering transmissions.
-//
-// See also ~UnitDiskRadioMedium, ~UnitDiskAnalogModel, ~UnitDiskTransmitter, and
-// ~UnitDiskReceiver.
-
-
-UnitDiskReceiver like IReceiver
-        bool ignoreInterference = default(false);
-
-
-//
-// This transmitter model produces transmissions that are parameterized with
-// communication range, interference range, and detection range. It also
-// supports an ideal communication channel with configuring the range parameters
-// to infinity.
-//
-// See also ~UnitDiskReceiver, ~UnitDiskRadio, ~UnitDiskRadioMedium, and
-// ~UnitDiskAnalogModel.
-//
-module UnitDiskTransmitter like ITransmitter
-        double preambleDuration @unit(s) = default(0s);                  // preamble added before the header
-        int headerLength @unit(b) = default(96b);                     // number of header bits added to the length of the MAC frame
-        double bitrate @unit(bps);                                       // the bitrate of the transmitter is used to compute the duration of the transmission
-        double communicationRange @unit(m);                              // the range where the reception of transmissions produced by this transmitter is possible
-        double interferenceRange @unit(m) = default(communicationRange); // the range where transmissions produced by this transmitter interferes with other transmissions
-        double detectionRange @unit(m) = default(interferenceRange);     // the range where transmissions produced by this transmitter can be detected at all
-        @class(UnitDiskTransmitter);
-        @display("i=block/wtx");
-
-Note: \nedtype{ShortcutInterface} provides an even simpler model...
+As a side note, if modeling full connectivity and ignoring 
+interference is required, then \nedtype{ShortcutInterface} 
+provides an even simpler and faster alternative.
 
 \subsection{ApskRadio}
 
