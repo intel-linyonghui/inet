@@ -289,18 +289,28 @@ provides an even simpler and faster alternative.
 \subsection{APSK Radio}
 
 APSK radio models provides a hypothetical radio that models 
-one of the well-known modulations without utilizing other techiques 
-such as forward error correction, interleaving, spreading, etc. 
+one of the well-known ASP, PSK and QAM modulations. 
 (APSK stands for Amplitude and Phase-Shift Keying.)
 
-There are variants of ApskRadio (Scalar, Dimensional, Layered):
-\nedtype{ApskScalarRadio}, \nedtype{ApskDimensionalRadio},
-\nedtype{ApskLayeredRadio}
+APSK radio has scalar, dimensional and layered variants.
+\nedtype{ApskScalarRadio} and \nedtype{ApskDimensionalRadio}
+model frame transmissons in the selected modulation scheme
+but without utilizing other techniques such as forward error 
+correction (FEC), interleaving, spreading, etc. These radios
+require matching medium models, \nedtype{ApskScalarRadioMedium}
+and \nedtype{ApskDimensionalRadioMedium}.
+
+The layered version, \nedtype{ApskLayeredRadio} contains
+a transmitter and receiver that has configura
+ApskLayeredReceiver and Transmitter have a selectable levelOfDetail 
+parameter that controls which domains are actually simulated.
+
 
 It must be used in conjunction with the ~ApskScalarRadioMedium model.
  
 \nedtype{ApskScalarRadio} contains \nedtype{IsotropicAntenna},
 \nedtype{ApskScalarTransmitter}, and \nedtype{ApskScalarTransmitter}.
+
 
 TODO limitations for usage in real-world protocol models
 
