@@ -51,11 +51,6 @@ energyConsumer: <energyConsumerType> like IEnergyConsumer
     if energyConsumerType != "";
 \end{ned}
 
-\nedtype{Radio} has several specialized versions where submodule types
-are set to a specific model type. For example, \nedtype{ApskScalarRadio} 
-contains \nedtype{IsotropicAntenna}, \nedtype{ApskScalarTransmitter},
-and \nedtype{ApskScalarTransmitter}. 
-
 The following sections describe the parts of the radio model.
 
 \section{Components of a Radio}
@@ -238,7 +233,9 @@ experimentation.
 
 \section{Notable Radio Models}
 
-TODO there are a few, but 
+The \nedtype{Radio} module has several specialized versions derived
+from it, where certain submodule types and parameters are set to fixed values.
+This section describes some of the frequently used ones.
 
 \subsection{UnitDiskRadio}
 
@@ -277,21 +274,39 @@ As a side note, if modeling full connectivity and ignoring
 interference is required, then \nedtype{ShortcutInterface} 
 provides an even simpler and faster alternative.
 
-\subsection{ApskRadio}
+\subsection{APSK Radio}
 
-TODO
+APSK radio models provides a hypothetical radio that simply uses 
+one of the well-known modulations without utilizing other techiques 
+such as forward error correction, interleaving, spreading, etc. 
+(APSK stands for Amplitude and Phase-Shift Keying.)
+
+variants of ApskRadio (Scalar, Dimensional, Layered):
+\nedtype{ApskScalarRadio}, \nedtype{ApskDimensionalRadio},
+\nedtype{ApskLayeredRadio}
+
+It must be used in conjunction with the ~ApskScalarRadioMedium model.
+ 
+\nedtype{ApskScalarRadio} contains \nedtype{IsotropicAntenna},
+\nedtype{ApskScalarTransmitter}, and \nedtype{ApskScalarTransmitter}.
+
+TODO limitations for usage in real-world protocol models
+
+TODO example
+
 
 \subsection{IEEE 802.11 Radios}
 
-TODO
+TODO why 802.11 needs specialized models 
 
 \subsection{IEEE 802.15.4 Radios}
 
-TODO
+TODO why 802.15.4 needs specialized models 
 
 \subsection{UWB-IR Radios}
 
-TODO
+TODO what is it
+
 
 %%% Local Variables:
 %%% mode: latex
