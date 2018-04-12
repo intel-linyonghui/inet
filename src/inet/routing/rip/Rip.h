@@ -42,7 +42,7 @@ struct RipRoute : public cObject
     };
 
   private:
-    RouteType type = (RouteType)-1;    // the type of the route
+    RouteType type = static_cast<RouteType>(-1);    // the type of the route
     IRoute *route = nullptr;    // the route in the host routing table that is associated with this route, may be nullptr if deleted
     L3Address dest;    // destination of the route
     int prefixLength = 0;    // prefix length of the destination

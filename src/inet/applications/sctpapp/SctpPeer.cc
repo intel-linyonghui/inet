@@ -199,7 +199,7 @@ void SctpPeer::connect()
     if (destination.isUnspecified())
         EV << "cannot resolve destination address: " << connectAddress << endl;
     else {
-        clientSocket.connect(destination, connectPort, streamReset, (int)par("prMethod"), (unsigned int)par("numRequestsPerSession"));
+        clientSocket.connect(destination, connectPort, streamReset, par("prMethod"), par("numRequestsPerSession"));
     }
 
     if (streamReset) {

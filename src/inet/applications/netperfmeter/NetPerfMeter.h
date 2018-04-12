@@ -84,7 +84,7 @@ class INET_API NetPerfMeter : public cSimpleModule
       TIMER_ON       = 7
    };
 
-   Protocol                TransportProtocol  = (Protocol)-1;
+   Protocol                TransportProtocol = static_cast<Protocol>(-1);
    bool                    ActiveMode = false;
    bool                    SendingAllowed = false;
    bool                    HasFinished = false;

@@ -987,7 +987,7 @@ void Igmpv3::sendGroupReport(InterfaceEntry *ie, const vector<GroupRecord>& reco
     unsigned int byteLength = 8;   // Igmpv3Report header size
     msg->setType(IGMPV3_MEMBERSHIP_REPORT);
     msg->setGroupRecordArraySize(records.size());
-    for (int i = 0; i < (int)records.size(); ++i) {
+    for (size_t i = 0; i < records.size(); ++i) {
         Ipv4Address group = records[i].groupAddress;
         ASSERT(group.isMulticast() && !group.isLinkLocalMulticast());
         msg->setGroupRecord(i, records[i]);

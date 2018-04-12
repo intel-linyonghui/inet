@@ -125,14 +125,15 @@ void NetPerfMeter::parseExpressionVector(std::vector<cDynamicExpression>& expres
 void NetPerfMeter::initialize()
 {
    // ====== Handle parameters ==============================================
-   ActiveMode = (bool)par("activeMode");
-   if(strcmp((const char*)par("protocol"), "TCP") == 0) {
+   ActiveMode = par("activeMode");
+   const char * protocolPar = par("protocol");
+   if(strcmp(protocolPar, "TCP") == 0) {
       TransportProtocol = TCP;
    }
-   else if(strcmp((const char*)par("protocol"), "SCTP") == 0) {
+   else if(strcmp(protocolPar, "SCTP") == 0) {
       TransportProtocol = SCTP;
    }
-   else if(strcmp((const char*)par("protocol"), "UDP") == 0) {
+   else if(strcmp(protocolPar, "UDP") == 0) {
       TransportProtocol = UDP;
    }
    else {
@@ -167,8 +168,8 @@ void NetPerfMeter::initialize()
    parseExpressionVector(FrameSizeExpressionVector, par("frameSizeString"), ";");
 
    TraceIndex = ~0;
-   if(strcmp((const char*)par("traceFile"), "") != 0) {
-      std::fstream traceFile((const char*)par("traceFile"));
+   if(strcmp(par("traceFile").stringValue(), "") != 0) {
+      std::fstream traceFile(par("traceFile").stringValue());
       if(!traceFile.good()) {
          throw cRuntimeError("Unable to load trace file");
       }
