@@ -96,7 +96,7 @@ std::string TcpBaseAlgStateVariables::detailedInfo() const
 }
 
 TcpBaseAlg::TcpBaseAlg() : TcpAlgorithm(),
-    state((TcpBaseAlgStateVariables *&)TcpAlgorithm::state)
+    state(reinterpret_cast<TcpBaseAlgStateVariables *&>(TcpAlgorithm::state))
 {
     rexmitTimer = persistTimer = delayedAckTimer = keepAliveTimer = nullptr;
     cwndVector = ssthreshVector = rttVector = srttVector = rttvarVector = rtoVector = numRtosVector = nullptr;

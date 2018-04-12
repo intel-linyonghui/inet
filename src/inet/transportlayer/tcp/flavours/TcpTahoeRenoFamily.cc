@@ -56,7 +56,7 @@ std::string TcpTahoeRenoFamilyStateVariables::detailedInfo() const
 //---
 
 TcpTahoeRenoFamily::TcpTahoeRenoFamily() : TcpBaseAlg(),
-    state((TcpTahoeRenoFamilyStateVariables *&)TcpAlgorithm::state)
+    state(reinterpret_cast<TcpTahoeRenoFamilyStateVariables *&>(TcpAlgorithm::state))
 {
 }
 

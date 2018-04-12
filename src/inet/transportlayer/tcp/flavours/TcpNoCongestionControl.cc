@@ -25,7 +25,7 @@ namespace tcp {
 Register_Class(TcpNoCongestionControl);
 
 TcpNoCongestionControl::TcpNoCongestionControl() : TcpBaseAlg(),
-    state((TcpNoCongestionControlStateVariables *&)TcpAlgorithm::state)
+    state(reinterpret_cast<TcpNoCongestionControlStateVariables *&>(TcpAlgorithm::state))
 {
 }
 

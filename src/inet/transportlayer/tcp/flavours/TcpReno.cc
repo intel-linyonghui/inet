@@ -27,7 +27,7 @@ namespace tcp {
 Register_Class(TcpReno);
 
 TcpReno::TcpReno() : TcpTahoeRenoFamily(),
-    state((TcpRenoStateVariables *&)TcpAlgorithm::state)
+    state(reinterpret_cast<TcpRenoStateVariables *&>(TcpAlgorithm::state))
 {
 }
 

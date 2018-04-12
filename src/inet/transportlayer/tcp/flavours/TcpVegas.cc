@@ -70,7 +70,7 @@ std::string TcpVegasStateVariables::detailedInfo() const
 }
 
 TcpVegas::TcpVegas()
-    : TcpBaseAlg(), state((TcpVegasStateVariables *&)TcpAlgorithm::state)
+    : TcpBaseAlg(), state(reinterpret_cast<TcpVegasStateVariables *&>(TcpAlgorithm::state))
 {
 }
 
