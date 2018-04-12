@@ -16,8 +16,9 @@ Conceptually, a radio model relies on several sub-models:
 \begin{itemize}
   \item antenna model
   \item transmitter model 
-  \item receiver model
-  \item energy consumer model 
+  \item receiver model 
+  \item error model (as part of the receiver model)
+  \item energy consumption model 
 \end{itemize}
 
 The antenna model is shared between the transmitter model and the receiver model.
@@ -28,9 +29,11 @@ it is only used when the simulation of energy consumption is necessary.
 TODO multiple implementations are provided for each model. For different
 level of detail (abstract/fast versus detailed), different modeling strategy, etc.
 
+TODO explain scalar, dimensional, and ``layered''
+
 TODO different signal representations for models of different detail levels, etc.
 
-\section{IRadio, Radio}
+\section{Generic Radio}
 
 In INET, radio models implement the \nedtype{IRadio} module interface. 
 A generic, often used implementation of \nedtype{IRadio} is the 
@@ -123,58 +126,70 @@ Some of the transmitter types available in INET:
 The receiver model describes the physical process which converts electric
 signals into packets. In other words, this model converts a reception, along
 with an interference computed by the medium model, into a MAC packet and a
-reception indication. 
+reception indication.
 
-It also determines the following for each transmission: 
+For a packet to be received successfully, reception must be \textit{possible}
+(based on reception power, bandwidth, modulation scheme and other characteristics),
+it must be \textit{attempted} (i.e. the receiver must synchronize itself on
+the preamble and start receiving), and it must be \textit{successful} 
+(as determined by the error model and the simulated part of the signal decoding).
 
-\begin{itemize}
-  \item \textit{Whether reception is possible}, based on the signal
-    characteristics such as reception power, carrier frequency, 
-    bandwidth, preamble mode, modulation scheme
-  \item Given that reception is possible: \textit{Whether reception is attempted}, 
-    based on the ongoing reception and the support of signal capturing
-  \item Given that reception is attempted: \textit{whether reception is successful},
-    based on the error model and the simulated part of the signal decoding
-\end{itemize}
-
-In the flat model the receiver model skips the sample domain, the symbol domain,
+In the \textit{flat model}, the receiver model skips the sample domain, the symbol domain,
 and the bit domain representations, and it directly creates the packet domain
 representation by copying the packet from the transmission. It uses the error
-model to decide if the reception is successful or not.
+model to decide whether the reception is successful.
 
-In the layered model the conversion process involves various processing steps
+In the \textit{layered model}, the conversion process involves various processing steps
 such as demodulation, descrambling, deinterleaving, forward error correction
 decoding, and deserialization. This reception model requires much more
-computation, but it produces accurate sample domain, symbol domain, and bit
-domain representations.
+computation than the flat model, but it produces accurate sample domain, 
+symbol domain, and bit domain representations.
 
-\subsection{Transmission Error Modeling}
+Some of the receiver types available in INET:
 
-Determining the reception errors is a crucial part of the reception process.
+\begin{itemize}
+  \item \nedtype{UnitDiskReceiver}
+  \item \nedtype{ApskScalarReceiver}
+  \item \nedtype{ApskDimensionalReceiver}
+  \item \nedtype{ApskLayeredReceiver}
+  \item \nedtype{Ieee80211ScalarReceiver}
+  \item \nedtype{Ieee80211DimensionalReceiver}
+\end{itemize}
+
+
+\subsection{Error Models}
+
+Determining reception errors is a crucial part of the reception process.
 There are often several different statistical error models in the literature
-even for a particular physical layer. In order to support this diversity the
+even for a particular physical layer. In order to support this diversity, the
 error model is a separate replaceable component of the receiver. 
 
 The error model describes how the signal to noise ratio affects the amount of
 errors at the receiver. The main purpose of this model is to determine whether
-if the received packet has errors or not. It also computes various physical
+the received packet has errors or not. It also computes various physical
 layer indications for higher layers such as packet error rate, bit error rate,
 and symbol error rate. For the layered reception model it needs to compute the
 erroneous bits, symbols, or samples depending on the lowest simulated physical
-domain where the real decoding starts. The error model is optional, if omitted
-all receptions are considered successful.
+domain where the real decoding starts. The error model is optional (if omitted,
+all receptions are considered successful.)
 
 \subsection{Power Consumption Models}
 
 A substantial part of the energy consumption of communication devices comes from
 transmitting and receiving signals. The energy consumer model describes how the
-radio consumes energy depending on its activity. This model is optional, if
-omitted energy consumption is ignored. The following list provides some examples:
+radio consumes energy depending on its activity. This model is optional (if
+omitted, energy consumption is ignored.) 
+
+The following list provides some examples:
 
 \begin{itemize}
-  \item \nedtype{StateBasedEnergyConsumer}: the constant power consumption is
-    determined by valid combinations of the radio mode, the transmitter state
-    and the receiver state
+  \item \nedtype{StateBasedEpEnergyConsumer}: power consumption is
+    determined by the radio state (a combination of radio mode, 
+    transmitter state and receiver state), and specified in 
+    parameters like \fpar{receiverIdlePowerConsumption} and 
+    \fpar{receiverReceivingDataPowerConsumption}, in watts.
+  \item \nedtype{StateBasedCcEnergyConsumer}: similar to the previous
+    one, but consumption is given in amp\`eres.
 \end{itemize}
 
 \section{Layered Radio Models}
@@ -224,10 +239,76 @@ TODO there are a few, but
 
 TODO
 
+UnitDiskRadio
+
+        double communicationRange @unit(m);                              // the range where the reception of transmissions produced by this transmitter is possible
+        double interferenceRange @unit(m) = default(communicationRange); // the range where transmissions produced by this transmitter interferes with other transmissions
+        double detectionRange @unit(m) = default(interferenceRange);     // the range where transmissions produced by this transmitter can be detected at all
+
+\begin{inifile}
+*.radioMediumType = "UnitDiskRadioMedium"
+*.host[*].wlan[*].radioType = "UnitDiskRadio"
+*.host[*].wlan[*].radio.transmitter.bitrate = 2Mbps
+*.host[*].wlan[*].radio.transmitter.preambleDuration = 0s
+*.host[*].wlan[*].radio.transmitter.headerLength = 100b
+*.host[*].wlan[*].radio.transmitter.communicationRange = 100m
+*.host[*].wlan[*].radio.transmitter.interferenceRange = 0m    % FIXME wtf is this????
+*.host[*].wlan[*].radio.transmitter.detectionRange = 0m
+*.host[*].wlan[*].radio.receiver.ignoreInterference = true
+\end{inifile}
+
+*
+        double communicationRange @unit(m);                              // the range where the reception of transmissions produced by this transmitter is possible
+        double interferenceRange @unit(m) = default(communicationRange); // the range where transmissions produced by this transmitter interferes with other transmissions
+        double detectionRange @unit(m) = default(interferenceRange);     // the range where transmissions produced by this transmitter can be detected at all
+
+
+
+//
+// This radio model provides a very simple but fast and predictable physical
+// layer behavior. It must be used in conjunction with the ~UnitDiskRadioMedium
+// model.
+//
+// The idea behind this radio model is to describe transmissions with a few
+// distance based parameters: communication range, interference range, and
+// detection range. Whether the reception is successful or not, depends on the
+// distance between the transmitter and the receiver. This model is similar to
+// the unit disk radio, but it's also more general than that. The ideal model
+// also supports an ideal communication channel where all transmissions are
+// received sucessfully independent of distance and interfering transmissions.
+//
+// See also ~UnitDiskRadioMedium, ~UnitDiskAnalogModel, ~UnitDiskTransmitter, and
+// ~UnitDiskReceiver.
+
+
+UnitDiskReceiver like IReceiver
+        bool ignoreInterference = default(false);
+
+
+//
+// This transmitter model produces transmissions that are parameterized with
+// communication range, interference range, and detection range. It also
+// supports an ideal communication channel with configuring the range parameters
+// to infinity.
+//
+// See also ~UnitDiskReceiver, ~UnitDiskRadio, ~UnitDiskRadioMedium, and
+// ~UnitDiskAnalogModel.
+//
+module UnitDiskTransmitter like ITransmitter
+        double preambleDuration @unit(s) = default(0s);                  // preamble added before the header
+        int headerLength @unit(b) = default(96b);                     // number of header bits added to the length of the MAC frame
+        double bitrate @unit(bps);                                       // the bitrate of the transmitter is used to compute the duration of the transmission
+        double communicationRange @unit(m);                              // the range where the reception of transmissions produced by this transmitter is possible
+        double interferenceRange @unit(m) = default(communicationRange); // the range where transmissions produced by this transmitter interferes with other transmissions
+        double detectionRange @unit(m) = default(interferenceRange);     // the range where transmissions produced by this transmitter can be detected at all
+        @class(UnitDiskTransmitter);
+        @display("i=block/wtx");
+
 \subsection{ApskRadio}
 
 TODO
 
+ApskRadio 
 
 %%% Local Variables:
 %%% mode: latex
