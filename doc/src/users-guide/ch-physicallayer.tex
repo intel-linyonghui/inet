@@ -288,33 +288,35 @@ provides an even simpler and faster alternative.
 
 \subsection{APSK Radio}
 
-APSK radio models provides a hypothetical radio that models 
+APSK radio models provide a hypothetical radio that simulates 
 one of the well-known ASP, PSK and QAM modulations. 
 (APSK stands for Amplitude and Phase-Shift Keying.)
 
-APSK radio has scalar, dimensional and layered variants.
-\nedtype{ApskScalarRadio} and \nedtype{ApskDimensionalRadio}
+APSK radio has scalar/dimensional, and flat/layered variants.
+The flat variants, \nedtype{ApskScalarRadio} and \nedtype{ApskDimensionalRadio}
 model frame transmissons in the selected modulation scheme
 but without utilizing other techniques such as forward error 
 correction (FEC), interleaving, spreading, etc. These radios
 require matching medium models, \nedtype{ApskScalarRadioMedium}
 and \nedtype{ApskDimensionalRadioMedium}.
 
-The layered version, \nedtype{ApskLayeredRadio} contains
-a transmitter and receiver that has configura
-ApskLayeredReceiver and Transmitter have a selectable levelOfDetail 
-parameter that controls which domains are actually simulated.
+The layered versions, \nedtype{ApskLayeredScalarRadio} 
+and \nedtype{ApskLayeredDimensionalRadio} can not only
+model the processing steps missing from their simpler counterparts,
+they it also features configurable level of detail: the transmitter
+and receiver modules have \fpar{levelOfDetail} parameters that 
+control which domains are actually simulated.
+These radio models must be used in conjuction with
+\nedtype{ApskLayeredScalarRadioMedium} and 
+\nedtype{ApskLayeredDimensionalRadioMedium}, respectively.
 
-
-It must be used in conjunction with the ~ApskScalarRadioMedium model.
- 
-\nedtype{ApskScalarRadio} contains \nedtype{IsotropicAntenna},
-\nedtype{ApskScalarTransmitter}, and \nedtype{ApskScalarTransmitter}.
-
+TODO ApskLayeredScalarRadio and ApskLayeredDimensionalRadio types are missing, actually create them!!! 
 
 TODO limitations for usage in real-world protocol models
 
-TODO example
+TODO example: 1 for flat!
+
+TODO fragment for a layered one!
 
 
 \subsection{IEEE 802.11 Radios}
