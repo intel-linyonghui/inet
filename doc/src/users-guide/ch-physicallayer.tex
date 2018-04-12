@@ -1,7 +1,7 @@
 \chapter{The Physical Layer (Transceiver Modeling)}
 \label{cha:physicallayer}
 
-\section{The Radio Model}
+\section{Overview}
 
 Wireless network interfaces contain a radio model component, which is
 responsible for modeling the physical layer (PHY).\footnote{Wired network interfaces
@@ -53,10 +53,11 @@ are set to a specific model type. For example, \nedtype{ApskScalarRadio}
 contains \nedtype{IsotropicAntenna}, \nedtype{ApskScalarTransmitter},
 and \nedtype{ApskScalarTransmitter}. 
 
-
 The following sections describe the parts of the radio model.
 
-\section{Antenna Models}
+\section{Components of a Radio}
+
+\subsection{Antenna Models}
 
 The antenna model describes the effects of the physical device which converts
 electric signals into radio waves, and vice versa. This model captures the
@@ -82,7 +83,7 @@ list provides some examples:
     interpolation according to a table indexed by the direction angles
 \end{itemize}
 
-\section{Transmitter Models}
+\subsection{Transmitter Models}
 
 The transmitter model describes the physical process which converts packets into
 electric signals. In other words, this model converts an L2 frame into a signal
@@ -117,7 +118,7 @@ Some of the transmitter types available in INET:
 \end{itemize}
 
 
-\section{Receiver Models}
+\subsection{Receiver Models}
 
 The receiver model describes the physical process which converts electric
 signals into packets. In other words, this model converts a reception, along
@@ -147,7 +148,7 @@ decoding, and deserialization. This reception model requires much more
 computation, but it produces accurate sample domain, symbol domain, and bit
 domain representations.
 
-\section{Transmission Error Modeling}
+\subsection{Transmission Error Modeling}
 
 Determining the reception errors is a crucial part of the reception process.
 There are often several different statistical error models in the literature
@@ -163,7 +164,7 @@ erroneous bits, symbols, or samples depending on the lowest simulated physical
 domain where the real decoding starts. The error model is optional, if omitted
 all receptions are considered successful.
 
-\section{Power Consumption Models}
+\subsection{Power Consumption Models}
 
 A substantial part of the energy consumption of communication devices comes from
 transmitting and receiving signals. The energy consumer model describes how the
@@ -176,9 +177,7 @@ omitted energy consumption is ignored. The following list provides some examples
     and the receiver state
 \end{itemize}
 
-\ifdraft
-TODO: layered
-\section{Layered Radio Model}
+\section{Layered Radio Models}
 
 This module further splits the transmitter and receiver models to allow bit
 precise communication modeling.
@@ -216,7 +215,18 @@ into the analog domain, and vice versa.
 
 TODO: layered
 
-\fi
+
+\section{Notable Radio Models}
+
+TODO there are a few, but 
+
+\subsection{UnitDiskRadio}
+
+TODO
+
+\subsection{ApskRadio}
+
+TODO
 
 
 %%% Local Variables:
