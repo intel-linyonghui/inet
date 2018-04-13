@@ -79,7 +79,7 @@ log normal shadowing:
 
 When the signal propagates through space it also passes through physical
 objects present in that space. As the signal penetrates physical objects,
-its power decreases when it reflects from surfaces, and also when it’s
+its power decreases when it reflects from surfaces, and also when it's
 absorbed by their material. There are various ways to model this effect,
 which differ in the trade-off between accuracy and performance.
 
@@ -105,7 +105,7 @@ Statistical obstacle loss models are also possible but currently not provided.
 
 Thermal noise, cosmic background noise, and other random fluctuations of
 the electromagnetic field affect the quality of the communication channel.
-This kind of noise doesn’t come from a particular source, so it doesn’t
+This kind of noise doesn't come from a particular source, so it doesn't
 make sense to model its propagation through space. The background noise
 model describes instead how it changes over space and time.
 
@@ -143,10 +143,10 @@ follows:
 \section{Neighbor Cache}
 
 Transceivers are considered neighbors if successful communication is
-possible between them. For wired communication it’s easy to determine
+possible between them. For wired communication it's easy to determine
 which transceivers are neighbors, because they are connected by wires. In
 contrast, in wireless communication determining which transceivers are
-neighbors isn’t obvious at all.
+neighbors isn't obvious at all.
 
 In INET, a neighbor cache model is an OMNeT++ simple module which provides
 an efficient way of keeping track of the neighbor relationship between
